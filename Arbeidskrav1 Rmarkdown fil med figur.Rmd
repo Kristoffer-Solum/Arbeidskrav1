@@ -1,0 +1,93 @@
+---
+title: "Arbeidskrav1"
+author: "Kristoffer Solum, Karen Grøndalen, Vetle Sælen"
+date: "15 9 2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+## Introduksjon
+
+En av de mest sentrale faktorene for utholdenhets prestasjonen er det maksimale oksygenopptaket (VO2maks) (Basset & Howley, 2000). VO2maks er bestemt av flere sentrale faktorer: lungenes kapasitet til å føre oksygen fra blodet, hjertets pumpekapasitet, volum, og sammensetning av blodet, og musklenes evne til å bruke oksygenet (Basset & Howley, 2000). 
+
+Hopkins (2000) definerer reliabilitet som reproduserbarheten til testverdier, analyser eller andre målinger på gjentatte forsøk på de samme individene. Det finnes tre hoved variasjoner man må ta hensyn til når man snakker om reliabilitet, det er: subjektets variasjon, endring i gjennomsnittet og rettest korrelasjon. Subjektets variasjon regnes ut gjennom standardavvik og standardfeil. Det kan komme fra biologiske forhold som kan variere mellom to tester. Utstyr kan og spille inn på dette, hvor det er støy ved målingene. Beste måten å bøte på dette er gjennom mange deltakere og få tester, heller enn motsatt. Endring i gjennomsnitt kan man dele i to deler, det er tilfeldig endring og systematisk endring. Tilfeldig endring er støy i målinger og data innsamlingsfeil. Dette kan minimeres gjennom å ha mange tester, hvor da til tilfeldige feilene vil spille mindre inn på resultatet. Systematisk endring er treningseffekten og læringseffekten man kan forvente mellom to tester, det handler om faktorene som spiller inn og kan gjøre post test, bedre enn pre test. Korrelasjon i rettest handler om hvor godt pretest og posttest korrelerer, hvis man har bedre korrelasjon, har man og høyere reliabilitet mellom testene. 
+I denne artikkelen skal det ses nærmere på hvor god reliabiliteten mellom to VO2maks tester er. Hvor pretesten og post testen er gjennomført med en ukes mellomrom.  
+ 
+
+## Metode 
+
+VO2maks testen ble gjennomført med en standard VO2maks protokoll. Hvor stigningen var konstant, 10,5% for guttene og 5,5% for jentene. Startfart var gitt på forhånd hvor alle startet på 8 km/t. For hvert minutt som gikk, økte farten med 1 km/t, og slik fortsatte det til utmattelse. Underveis i testen ble det gitt verbal oppmuntring fra testleder, det var og testleder som justerte farten underveis. Testen ble gjennomført på en woodway løpemølle. Hele testen ble gjennomført med kontinuerlig oksygenmåling hvert 30. sekuund. Oksygenmålingene ble gjennomført med en Vyntus CPX, mixing chamber (Vyntus CPX, Jaeger-CareFusion, UK). Ved målinger på Vyntus CPX ble det automatisk kalibrert for gass, volum og luftfuktighet før hver test. Oppvarmingen før testen var valgfri, og varte fra 10-15 min. Underveis i oppvarmingen ble testprotokollen forklart for utøver, og eventuelle spørsmål om testen ble avklart. Under testen ble det målt ml/min VO2, Ventilasjon (V’E), Pustefrekvens (BF), RER, hjertefrekvensen (HF). Umiddelbart etter testen ble det spurt om Borg skala (RPE), det ble og notert ned hva siste belastning var og hvor lenge utøver løp på denne belastningen. Et minutt etter testen ble det målt laktat (La) gjennom et fingerstikk og analysert gjennom Biosen blodlaktatmåler (Biosen C-line, EKF Diagnostics, Barleben, Germany), HF ble og notert ned. 
+
+Posttesten ble gjennomført på samme måte som pretesten, hvor samme protokoll ble gjennomført på nytt
+
+
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(readxl)
+library(tidyverse)
+
+Dat <- read_excel("~/Master/vo2maks arbeidskrav 1.xlsx") %>%
+  mutate(diff = Post - Pre) %>%
+  
+  summarise(s = sd(diff),
+            te = s / sqrt(2),
+            m = mean(c(Pre, Post)),
+            cv = (te / m) * 100) 
+
+
+
+
+
+cv <- round(Dat$cv, 2)
+
+Standardavik <- round(Dat$s, 2)
+
+```
+
+
+## Resultat og diskusjon
+
+Standardfeilen i studien var `r cv` %.
+
+Standardaviket i studien var `r Standardavik` 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Check if remotes is not installed, if TRUE, install remotes
+if (!"remotes" %in% installed.packages()) install.packages(remotes)
+
+# Check if exscidata is not installed, if TRUE, install exscidata from github
+if (!"exscidata" %in% installed.packages()) remotes::install_github("dhammarstrom/exscidata")
+
+# Load exscidata
+library(exscidata)
+
+# Check if tidyverse is not installed, if TRUE, install remotes
+if (!"tidyverse" %in% installed.packages()) install.packages(tidyverse)
+
+library(tidyverse)
+library(readxl)
+
+
+ark3 <- read_excel("~/Master/vo2maks arbeidskrav 1 ark 2.xlsx")
+
+# Printing the data set
+ark3
+
+# Creating a boxplot of all values per group
+ggplot(ark3, aes(tid, vo2)) + geom_boxplot() + geom_jitter()
+
+
+
+
+```
+
+
+## Referanser
+
+Hopkins W. G. (2000). Measures of reliability in sports medicine and science. Sports medicine (Auckland, N.Z.), 30(1), 1–15.
+
+Basset, D. R., & Howley, E. T. (2000, Januar). Limiting factors or maximum oxygen uptake and determinants of endurance performance. Medicine & Science in Sports & Exercise, ss.70-84
+
+
